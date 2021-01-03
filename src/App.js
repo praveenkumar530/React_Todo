@@ -105,38 +105,50 @@ function App() {
   }
 
   function completeButtonClickHandler(completedKey) {
-    // Complete code
-    let completedTaks = pendingTasksArray.filter(
-      (item) => item.uniqueKey === completedKey
+    let completableItem = pendingTasksArray.filter(
+      (item) => item.uniqueKey == completedKey
     )[0];
-    completedTaks.isComplete = true;
+    let confrimMessage = `Are you sure you want to complete "${completableItem.taskName}" ?`;
+    if (window.confirm(confrimMessage)) {
+      // Complete code
+      let completedTaks = pendingTasksArray.filter(
+        (item) => item.uniqueKey === completedKey
+      )[0];
+      completedTaks.isComplete = true;
 
-    //Complete day calculation
-    let { completedDate, day } = getDayFormat(new Date().toDateString());
+      //Complete day calculation
+      let { completedDate, day } = getDayFormat(new Date().toDateString());
 
-    completedTaks.completedDate = completedDate;
-    completedTaks.day = day;
+      completedTaks.completedDate = completedDate;
+      completedTaks.day = day;
 
-    deleteButtonFromPendingClickHandler(completedKey);
+      deleteButtonFromPendingClickHandler(completedKey);
 
-    let newCompletedTasksArray = [completedTaks, ...completedTasksArray];
-    setCompletedTasksArray(newCompletedTasksArray);
-    localStorage.setItem(
-      "getLsCompletedTasksArray",
-      JSON.stringify(newCompletedTasksArray)
-    );
+      let newCompletedTasksArray = [completedTaks, ...completedTasksArray];
+      setCompletedTasksArray(newCompletedTasksArray);
+      localStorage.setItem(
+        "getLsCompletedTasksArray",
+        JSON.stringify(newCompletedTasksArray)
+      );
+    }
   }
 
   function deleteButtonFromPendingClickHandler(deletingKey) {
-    let newPendingTasksArray = pendingTasksArray.filter(
-      (item) => item.uniqueKey !== deletingKey
-    );
+    let deletableItem = pendingTasksArray.filter(
+      (item) => item.uniqueKey == deletingKey
+    )[0];
+    let confrimMessage = `Are you sure you want to delete "${deletableItem.taskName}" ?`;
+    if (window.confirm(confrimMessage)) {
+      let newPendingTasksArray = pendingTasksArray.filter(
+        (item) => item.uniqueKey !== deletingKey
+      );
 
-    setPendingTasksArray(newPendingTasksArray);
-    localStorage.setItem(
-      "getLsPendingTasksArray",
-      JSON.stringify(newPendingTasksArray)
-    );
+      setPendingTasksArray(newPendingTasksArray);
+      localStorage.setItem(
+        "getLsPendingTasksArray",
+        JSON.stringify(newPendingTasksArray)
+      );
+    }
   }
 
   function deleteButtonFromCompletedClickHandler(deletingKey) {
