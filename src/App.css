@@ -5,23 +5,21 @@
 }
 
 body {
-  background-color: rgba(245, 245, 29, 0.37);
-  /* background-color: rgb(104, 212, 212); */
-  /* background-color: rgb(87, 223, 223); */
+   background-color: #F8F8FF;
 }
 
 .App-header {
-  background-color: rgb(4, 158, 4);
+  background-color: #bd213b;
   align-items: center;
   justify-content: center;
   margin: 5px 0;
   margin-bottom: 20px;
   padding: 15px;
   font-size: x-large;
-  border: 2px solid red;
+  border: 1px solid black;
   border-radius: 20px;
   color: yellow;
-  box-shadow: 0 5px 10px black;
+  box-shadow: 0 8px 10px black;
 }
 
  

@@ -4,6 +4,7 @@ import {
   faCheckDouble,
   faThumbsUp,
   faHandsWash,
+  faThumbsDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 import React from "react";
@@ -45,7 +46,11 @@ export function PendingTableComponent({
               <td>
                 {item.remainingDays <= -1 ? (
                   <span className="badge badge-pill badge-danger">
-                    {item.remainingDays + " days"}
+                    {item.remainingDays + " days"}{" "}
+                    <FontAwesomeIcon
+                      className="text-warning  "
+                      icon={faThumbsDown}
+                    />
                   </span>
                 ) : item.remainingDays === 0 ? (
                   <span className=" badge badge-pill badge-primary">Today</span>

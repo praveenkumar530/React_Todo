@@ -78,7 +78,7 @@ function App() {
       JSON.stringify(newPendingTasksArray)
     );
     setTaskName("");
-    setTaskDate("1");
+    setTaskDate("");
     e.preventDefault();
   }
 
