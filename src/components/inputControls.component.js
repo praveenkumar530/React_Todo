@@ -6,11 +6,16 @@ export function InputControlsComponent({
   taskDate,
   setTaskDate,
   submitHandler,
+  editUniqKey,
+  cancelEditHandler,
+  saveEditedChangesHandler,
 }) {
   return (
     <form onSubmit={submitHandler}>
       <div className="form-group">
-        <label htmlFor="taskName">Task Name:</label>
+        <label htmlFor="taskName " className="font-weight-bold">
+          Task Name:
+        </label>
         <input
           type="text"
           className="form-control"
@@ -23,7 +28,9 @@ export function InputControlsComponent({
         />
       </div>
       <div className="form-group">
-        <label htmlFor="datePicker">Complete By:</label>
+        <label htmlFor="datePicker" className="font-weight-bold">
+          Complete By:
+        </label>
         <input
           type="date"
           className="form-control"
@@ -35,9 +42,32 @@ export function InputControlsComponent({
           required
         />
       </div>
-      <button type="submit" className="btn btn-success px-5 mb-3">
-        Submit
-      </button>
+      {editUniqKey === 0 && (
+        <button type="submit" className="btn btn-success px-5 mb-3">
+          Submit
+        </button>
+      )}
+      <div className="btn-group" role="group">
+        {editUniqKey !== 0 && (
+          <button
+            type="submit"
+            className="btn btn-warning  mb-3"
+            onClick={saveEditedChangesHandler}
+          >
+            Save Changes
+          </button>
+        )}
+
+        {editUniqKey !== 0 && (
+          <button
+            type="submit"
+            className="btn btn-secondary px-5 mb-3"
+            onClick={cancelEditHandler}
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 }

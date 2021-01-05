@@ -11,8 +11,8 @@ export function CompeletedTableComponent({
 }) {
   return (
     <div>
-      <h4 className="completed-header">Completed Tasks</h4>
-      {completedTasksArray.length === 0 ? <p>No records</p> : ""}
+      <h4 className="completed-header ">Completed Tasks</h4>
+      {completedTasksArray.length === 0 ? <p className="mt-4">No records found !!</p> : ""}
       <table
         className="table table-sm mt-2 bg-lightGreen "
         hidden={completedTasksArray.length === 0}
@@ -34,7 +34,7 @@ export function CompeletedTableComponent({
               <td>
                 <button
                   type="button"
-                  className="btn btn-danger"
+                  className="btn1 btn-danger mb-2"
                   onClick={() =>
                     deleteButtonFromCompletedClickHandler(item.uniqueKey)
                   }

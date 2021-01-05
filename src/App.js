@@ -21,6 +21,8 @@ function App() {
     getLsCompletedTasksArray
   );
 
+  const [editUniqKey, setEditUniqKey] = useState(0);
+
   useEffect(() => {
     updateRemainingDaysForOlderTasks();
   }, []);
@@ -45,6 +47,7 @@ function App() {
     let uniqueKey = Math.floor(
       window.performance.now() + window.performance.timeOrigin
     );
+
     let isComplete = false;
 
     //method reuse and copying to completBy date
@@ -106,25 +109,22 @@ function App() {
 
   function completeButtonClickHandler(completedKey) {
     let completableItem = pendingTasksArray.filter(
-      (item) => item.uniqueKey == completedKey
+      (item) => item.uniqueKey === completedKey
     )[0];
     let confrimMessage = `Are you sure you want to complete "${completableItem.taskName}" ?`;
     if (window.confirm(confrimMessage)) {
       // Complete code
-      let completedTaks = pendingTasksArray.filter(
-        (item) => item.uniqueKey === completedKey
-      )[0];
-      completedTaks.isComplete = true;
+      completableItem.isComplete = true;
 
       //Complete day calculation
       let { completedDate, day } = getDayFormat(new Date().toDateString());
 
-      completedTaks.completedDate = completedDate;
-      completedTaks.day = day;
+      completableItem.completedDate = completedDate;
+      completableItem.day = day;
 
-      deleteButtonFromPendingClickHandler(completedKey);
+      deleteAnItemFromPendingArrayByIndexKey(completedKey);
 
-      let newCompletedTasksArray = [completedTaks, ...completedTasksArray];
+      let newCompletedTasksArray = [completableItem, ...completedTasksArray];
       setCompletedTasksArray(newCompletedTasksArray);
       localStorage.setItem(
         "getLsCompletedTasksArray",
@@ -135,20 +135,31 @@ function App() {
 
   function deleteButtonFromPendingClickHandler(deletingKey) {
     let deletableItem = pendingTasksArray.filter(
-      (item) => item.uniqueKey == deletingKey
+      (item) => item.uniqueKey === deletingKey
     )[0];
+
     let confrimMessage = `Are you sure you want to delete "${deletableItem.taskName}" ?`;
     if (window.confirm(confrimMessage)) {
-      let newPendingTasksArray = pendingTasksArray.filter(
-        (item) => item.uniqueKey !== deletingKey
-      );
+      if (deletingKey === editUniqKey) {
+        setEditUniqKey(0);
+        setTaskDate("");
+        setTaskName("");
+      }
 
-      setPendingTasksArray(newPendingTasksArray);
-      localStorage.setItem(
-        "getLsPendingTasksArray",
-        JSON.stringify(newPendingTasksArray)
-      );
+      deleteAnItemFromPendingArrayByIndexKey(deletingKey);
     }
+  }
+
+  function deleteAnItemFromPendingArrayByIndexKey(deletingKey) {
+    let newPendingTasksArray = pendingTasksArray.filter(
+      (item) => item.uniqueKey !== deletingKey
+    );
+
+    setPendingTasksArray(newPendingTasksArray);
+    localStorage.setItem(
+      "getLsPendingTasksArray",
+      JSON.stringify(newPendingTasksArray)
+    );
   }
 
   function deleteButtonFromCompletedClickHandler(deletingKey) {
@@ -168,6 +179,69 @@ function App() {
     localStorage.setItem("getLsCompletedTasksArray", []);
   }
 
+  function editButtonFromPendingClickHandler(editKey) {
+    let editableItem = pendingTasksArray.filter(
+      (item) => item.uniqueKey === editKey
+    )[0];
+    setTaskName(editableItem.taskName);
+    let d = new Date(editableItem.taskDueDate);
+    let year = d.getFullYear().toString();
+    let month = 1 + d.getMonth();
+    month =
+      month.toString().length < 2 ? "0" + month.toString() : month.toString();
+    let date = d.getDate();
+    date = date.toString().length < 2 ? "0" + date.toString() : date.toString();
+    setTaskDate(year + "-" + month + "-" + date);
+    setEditUniqKey(editKey);
+  }
+
+  function cancelEditHandler(e) {
+    setEditUniqKey(0);
+    setTaskName("");
+    setTaskDate("");
+    e.preventDefault();
+  }
+
+  function saveEditedChangesHandler(e) {
+    //method reuse and copying to completBy date
+    let { completedDate, day } = getDayFormat(
+      new Date(taskDate).toDateString()
+    );
+
+    let taskDueDate = new Date(taskDate);
+
+    let remainingDays = remainingDaysCalculator(taskDueDate);
+    let completeBy = completedDate;
+
+    //update the existing record with new details ( edited )
+
+    let newPendingTasksArray = pendingTasksArray;
+    let objIndex = newPendingTasksArray.findIndex(
+      (item) => item.uniqueKey === editUniqKey
+    );
+
+    //Update object's name property.
+    newPendingTasksArray[objIndex].taskName = taskName;
+    newPendingTasksArray[objIndex].completeBy = completeBy;
+    newPendingTasksArray[objIndex].taskDueDate = taskDueDate;
+    newPendingTasksArray[objIndex].day = day;
+    newPendingTasksArray[objIndex].remainingDays = remainingDays;
+
+    //Sorting all the expenses by descending order i.e wrt latest item
+    newPendingTasksArray.sort((x, y) => x.remainingDays - y.remainingDays);
+    setPendingTasksArray(newPendingTasksArray);
+
+    localStorage.setItem(
+      "getLsPendingTasksArray",
+      JSON.stringify(newPendingTasksArray)
+    );
+
+    setEditUniqKey(0);
+    setTaskName("");
+    setTaskDate("");
+    e.preventDefault();
+  }
+
   return (
     <div className="App container">
       <HeaderComponent />
@@ -178,6 +252,9 @@ function App() {
         taskDate={taskDate}
         setTaskDate={setTaskDate}
         submitHandler={submitHandler}
+        editUniqKey={editUniqKey}
+        cancelEditHandler={cancelEditHandler}
+        saveEditedChangesHandler={saveEditedChangesHandler}
       />
 
       <PendingTableComponent
@@ -186,6 +263,7 @@ function App() {
         deleteButtonFromPendingClickHandler={
           deleteButtonFromPendingClickHandler
         }
+        editButtonFromPendingClickHandler={editButtonFromPendingClickHandler}
       />
       <CompeletedTableComponent
         completedTasksArray={completedTasksArray}

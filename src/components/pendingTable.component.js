@@ -4,7 +4,7 @@ import {
   faCheckDouble,
   faThumbsUp,
   faHandsWash,
-  faThumbsDown,
+  faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 import React from "react";
@@ -13,6 +13,7 @@ export function PendingTableComponent({
   pendingTasksArray,
   deleteButtonFromPendingClickHandler,
   completeButtonClickHandler,
+  editButtonFromPendingClickHandler,
 }) {
   return (
     <div>
@@ -46,11 +47,7 @@ export function PendingTableComponent({
               <td>
                 {item.remainingDays <= -1 ? (
                   <span className="badge badge-pill badge-danger">
-                    {item.remainingDays + " days"}{" "}
-                    <FontAwesomeIcon
-                      className="text-warning  "
-                      icon={faThumbsDown}
-                    />
+                    {item.remainingDays + " days"} 
                   </span>
                 ) : item.remainingDays === 0 ? (
                   <span className=" badge badge-pill badge-primary">Today</span>
@@ -71,14 +68,23 @@ export function PendingTableComponent({
               <td>
                 <button
                   type="button"
-                  className="btn btn-success mr-3"
+                  className="btn1 btn-success mr-1"
                   onClick={() => completeButtonClickHandler(item.uniqueKey)}
                 >
                   <FontAwesomeIcon icon={faCheckDouble} />
                 </button>
                 <button
                   type="button"
-                  className="btn btn-danger"
+                  className="btn1 btn-warning mr-1"
+                  onClick={() =>
+                    editButtonFromPendingClickHandler(item.uniqueKey)
+                  }
+                >
+                  <FontAwesomeIcon icon={faPencilAlt} />
+                </button>
+                <button
+                  type="button"
+                  className="btn1 btn-danger "
                   onClick={() =>
                     deleteButtonFromPendingClickHandler(item.uniqueKey)
                   }
