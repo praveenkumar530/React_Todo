@@ -37,7 +37,6 @@ export function InputControlsComponent({
           id="datePicker"
           value={taskDate}
           autoComplete="off"
-          placeholder="Pick a date..."
           onChange={(e) => setTaskDate(e.target.value)}
           required
         />

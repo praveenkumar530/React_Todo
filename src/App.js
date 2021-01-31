@@ -8,6 +8,8 @@ import {
   getLsCompletedTasksArray,
 } from "./localStorage";
 import HeaderComponent from "./components/header.component";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [taskName, setTaskName] = useState("");
@@ -25,7 +27,16 @@ function App() {
 
   useEffect(() => {
     updateRemainingDaysForOlderTasks();
+
+    setTaskDate(getDefalutDate());
   }, []);
+
+  function getDefalutDate() {
+    let t = new Date();
+    let month = (t.getMonth() + 1).toString();
+    month = month.length == 1 ? "0" + month : month;
+    return `${t.getFullYear()}-${month}-${t.getDate()}`;
+  }
 
   function updateRemainingDaysForOlderTasks() {
     let newPendingTasksArray = pendingTasksArray.map(function (item) {
@@ -81,7 +92,10 @@ function App() {
       JSON.stringify(newPendingTasksArray)
     );
     setTaskName("");
-    setTaskDate("");
+    setTaskDate(getDefalutDate());
+    toast.success(`Task "${taskName}" added successfully!`, {
+      autoClose: 2000,
+    });
     e.preventDefault();
   }
 
@@ -111,26 +125,30 @@ function App() {
     let completableItem = pendingTasksArray.filter(
       (item) => item.uniqueKey === completedKey
     )[0];
-    let confrimMessage = `Are you sure you want to complete "${completableItem.taskName}" ?`;
-    if (window.confirm(confrimMessage)) {
-      // Complete code
-      completableItem.isComplete = true;
 
-      //Complete day calculation
-      let { completedDate, day } = getDayFormat(new Date().toDateString());
+    // Complete code
+    completableItem.isComplete = true;
 
-      completableItem.completedDate = completedDate;
-      completableItem.day = day;
+    //Complete day calculation
+    let { completedDate, day } = getDayFormat(new Date().toDateString());
 
-      deleteAnItemFromPendingArrayByIndexKey(completedKey);
+    completableItem.completedDate = completedDate;
+    completableItem.day = day;
 
-      let newCompletedTasksArray = [completableItem, ...completedTasksArray];
-      setCompletedTasksArray(newCompletedTasksArray);
-      localStorage.setItem(
-        "getLsCompletedTasksArray",
-        JSON.stringify(newCompletedTasksArray)
-      );
-    }
+    deleteAnItemFromPendingArrayByIndexKey(completedKey);
+
+    let newCompletedTasksArray = [completableItem, ...completedTasksArray];
+    setCompletedTasksArray(newCompletedTasksArray);
+    localStorage.setItem(
+      "getLsCompletedTasksArray",
+      JSON.stringify(newCompletedTasksArray)
+    );
+    toast.success(
+      `Task "${completableItem.taskName}" completed successfully!`,
+      {
+        autoClose: 2000,
+      }
+    );
   }
 
   function deleteButtonFromPendingClickHandler(deletingKey) {
@@ -138,16 +156,15 @@ function App() {
       (item) => item.uniqueKey === deletingKey
     )[0];
 
-    let confrimMessage = `Are you sure you want to delete "${deletableItem.taskName}" ?`;
-    if (window.confirm(confrimMessage)) {
-      if (deletingKey === editUniqKey) {
-        setEditUniqKey(0);
-        setTaskDate("");
-        setTaskName("");
-      }
-
-      deleteAnItemFromPendingArrayByIndexKey(deletingKey);
+    if (deletingKey === editUniqKey) {
+      setEditUniqKey(0);
+      setTaskDate(getDefalutDate());
+      setTaskName("");
     }
+    toast(`Task "${deletableItem.taskName}" deleted!`, {
+      autoClose: 2000,
+    });
+    deleteAnItemFromPendingArrayByIndexKey(deletingKey);
   }
 
   function deleteAnItemFromPendingArrayByIndexKey(deletingKey) {
@@ -163,6 +180,10 @@ function App() {
   }
 
   function deleteButtonFromCompletedClickHandler(deletingKey) {
+    let deletedItem = completedTasksArray.filter(
+      (item) => item.uniqueKey === deletingKey
+    )[0];
+
     let newCompletedTasksArray = completedTasksArray.filter(
       (item) => item.uniqueKey !== deletingKey
     );
@@ -172,11 +193,13 @@ function App() {
       "getLsCompletedTasksArray",
       JSON.stringify(newCompletedTasksArray)
     );
+    toast(`Task "${deletedItem.taskName}" has been deleted!`);
   }
 
   function clearAllCompletedTasks() {
     setCompletedTasksArray([]);
     localStorage.setItem("getLsCompletedTasksArray", []);
+    toast("All the completed Tasks have been cleared!");
   }
 
   function editButtonFromPendingClickHandler(editKey) {
@@ -198,7 +221,7 @@ function App() {
   function cancelEditHandler(e) {
     setEditUniqKey(0);
     setTaskName("");
-    setTaskDate("");
+    setTaskDate(getDefalutDate());
     e.preventDefault();
   }
 
@@ -214,11 +237,11 @@ function App() {
     let completeBy = completedDate;
 
     //update the existing record with new details ( edited )
-
     let newPendingTasksArray = pendingTasksArray;
     let objIndex = newPendingTasksArray.findIndex(
       (item) => item.uniqueKey === editUniqKey
     );
+    let oldTaskName = newPendingTasksArray[objIndex].taskName;
 
     //Update object's name property.
     newPendingTasksArray[objIndex].taskName = taskName;
@@ -238,13 +261,18 @@ function App() {
 
     setEditUniqKey(0);
     setTaskName("");
-    setTaskDate("");
+    setTaskDate(getDefalutDate());
+    toast.success(
+      `Task "${oldTaskName}" updated to "${newPendingTasksArray[objIndex].taskName}" successfully`,
+      { autoClose: 3000 }
+    );
     e.preventDefault();
   }
 
   return (
     <div className="App container">
       <HeaderComponent />
+      <ToastContainer />
       <InputControlsComponent
         className=" "
         taskName={taskName}
