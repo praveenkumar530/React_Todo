@@ -193,13 +193,15 @@ function App() {
       "getLsCompletedTasksArray",
       JSON.stringify(newCompletedTasksArray)
     );
-    toast(`Task "${deletedItem.taskName}" has been deleted!`);
+    toast(`Task "${deletedItem.taskName}" has been deleted!`, {
+      autoClose: 2000,
+    });
   }
 
   function clearAllCompletedTasks() {
     setCompletedTasksArray([]);
     localStorage.setItem("getLsCompletedTasksArray", []);
-    toast("All the completed Tasks have been cleared!");
+    toast("All the completed Tasks have been cleared!", { autoClose: 2000 });
   }
 
   function editButtonFromPendingClickHandler(editKey) {
