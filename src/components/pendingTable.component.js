@@ -75,7 +75,7 @@ export function PendingTableComponent({
         ""
       )}
       <table
-        className="table table-sm mt-2 bg-lightOrange"
+        className="table table-sm  bg-lightOrange"
         hidden={pendingTasksArray.length === 0}
       >
         <thead>

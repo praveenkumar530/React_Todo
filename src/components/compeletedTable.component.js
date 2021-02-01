@@ -73,7 +73,7 @@ export function CompeletedTableComponent({
       <Button
         variant="contained"
         color="secondary"
-        className="mb-2"
+        className="mb-2 shadow"
         onClick={handleClickOpen}
         startIcon={<DeleteIcon />}
         hidden={completedTasksArray.length === 0}

@@ -34,8 +34,11 @@ function App() {
   function getDefalutDate() {
     let t = new Date();
     let month = (t.getMonth() + 1).toString();
+    let day = t.getDate().toString();
+    day = day.length == 1 ? "0" + day : day;
+
     month = month.length == 1 ? "0" + month : month;
-    return `${t.getFullYear()}-${month}-${t.getDate()}`;
+    return `${t.getFullYear()}-${month}-${day}`;
   }
 
   function updateRemainingDaysForOlderTasks() {

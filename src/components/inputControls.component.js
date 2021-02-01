@@ -42,7 +42,7 @@ export function InputControlsComponent({
         />
       </div>
       {editUniqKey === 0 && (
-        <button type="submit" className="btn btn-success px-5 mb-3">
+        <button type="submit" className="btn btn-success px-5 mb-3 shadow">
           Submit
         </button>
       )}
@@ -50,7 +50,7 @@ export function InputControlsComponent({
         {editUniqKey !== 0 && (
           <button
             type="submit"
-            className="btn btn-warning  mb-3"
+            className="btn btn-warning  mb-3 shadow"
             onClick={saveEditedChangesHandler}
           >
             Save Changes
@@ -60,7 +60,7 @@ export function InputControlsComponent({
         {editUniqKey !== 0 && (
           <button
             type="submit"
-            className="btn btn-secondary px-5 mb-3"
+            className="btn btn-secondary px-5 mb-3 shadow"
             onClick={cancelEditHandler}
           >
             Cancel

@@ -38,29 +38,27 @@ td {
 
 .upcoming-header {
   background-color: rgba(255, 166, 0, 0.431);
-  /* background-color: orange; */
-  border-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   padding: 7px;
   margin-top: 5px;
-  box-shadow: 0 5px 10px black;
+  box-shadow: 0 5px 5px rgb(99, 97, 97);
 }
 .completed-header {
   background-color: lightgreen;
-  /* background-color: rgb(4, 158, 4); */
-  border-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   padding: 7px;
-  box-shadow: 0 5px 10px black;
+  box-shadow: 0 5px 5px rgb(99, 97, 97);
   margin-top: 25x;
 }
 
 .bg-lightGreen {
   background-color: lightgreen;
-  border-radius: 20px;
 }
 
 .bg-lightOrange {
   background-color: rgba(255, 166, 0, 0.431);
-  border-radius: 20px;
 }
 
 th {
@@ -71,9 +69,13 @@ tr {
   border-bottom: 2px white solid;
 }
 
+.shadow {
+  box-shadow: opx opx 12px -12px;
+}
+
 .btn1 {
-  box-shadow: 0 5px 10px black;
- 
+  box-shadow: 0 3px 5px rgb(136, 132, 132);
+
   display: inline-block;
   vertical-align: middle;
   user-select: none;
