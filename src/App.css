@@ -19,7 +19,7 @@ body {
   border: 1px solid black;
   border-radius: 20px;
   color: white;
-  box-shadow: 0 8px 10px black;
+  box-shadow: 0 5px 10px  rgb(99, 97, 97);
 }
 
 table {
@@ -75,7 +75,6 @@ tr {
 
 .btn1 {
   box-shadow: 0 3px 5px rgb(136, 132, 132);
-
   display: inline-block;
   vertical-align: middle;
   user-select: none;

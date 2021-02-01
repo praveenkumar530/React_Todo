@@ -9,6 +9,7 @@ export function InputControlsComponent({
   editUniqKey,
   cancelEditHandler,
   saveEditedChangesHandler,
+  refToTaskName,
 }) {
   return (
     <form onSubmit={submitHandler}>
@@ -17,6 +18,7 @@ export function InputControlsComponent({
           Task Name:
         </label>
         <input
+          ref={refToTaskName}
           type="text"
           className="form-control"
           id="taskName"

@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CompeletedTableComponent } from "./components/compeletedTable.component";
 import { InputControlsComponent } from "./components/inputControls.component";
 import { PendingTableComponent } from "./components/pendingTable.component";
@@ -24,6 +24,8 @@ function App() {
   );
 
   const [editUniqKey, setEditUniqKey] = useState(0);
+  const refToTaskName = useRef();
+  const refToHeader = useRef();
 
   useEffect(() => {
     updateRemainingDaysForOlderTasks();
@@ -35,9 +37,9 @@ function App() {
     let t = new Date();
     let month = (t.getMonth() + 1).toString();
     let day = t.getDate().toString();
-    day = day.length == 1 ? "0" + day : day;
+    day = day.length === 1 ? "0" + day : day;
 
-    month = month.length == 1 ? "0" + month : month;
+    month = month.length === 1 ? "0" + month : month;
     return `${t.getFullYear()}-${month}-${day}`;
   }
 
@@ -208,6 +210,10 @@ function App() {
   }
 
   function editButtonFromPendingClickHandler(editKey) {
+    //Scroll to Header and Focus task name input field
+    refToHeader.current.scrollIntoView({ behavior: "smooth" });
+    refToTaskName.current.focus({ preventScroll: true });
+
     let editableItem = pendingTasksArray.filter(
       (item) => item.uniqueKey === editKey
     )[0];
@@ -276,10 +282,10 @@ function App() {
 
   return (
     <div className="App container">
-      <HeaderComponent />
+      <HeaderComponent refToHeader={refToHeader} />
       <ToastContainer />
       <InputControlsComponent
-        className=" "
+        refToTaskName={refToTaskName}
         taskName={taskName}
         setTaskName={setTaskName}
         taskDate={taskDate}
